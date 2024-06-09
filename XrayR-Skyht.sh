@@ -8,6 +8,18 @@ read -p "  Vui lòng chọn một số và nhấn Enter (Enter theo mặc địn
 
 install(){
   clear
+  read -p " Nhập domain web (không cần https://):" api_host
+    [ -z "${api_host}" ] && api_host=0
+    echo "--------------------------------"
+  echo "Bạn đã chọn https://${api_host}"
+  echo "--------------------------------"
+  #key web
+  read -p " Nhập key web :" api_key
+    [ -z "${api_key}" ] && api_key=0
+  echo "--------------------------------"
+  echo "Bạn đã chọn https://${api_host}"
+  echo "--------------------------------"
+
   pre_install
   
 }
@@ -64,48 +76,6 @@ fi
   echo "-------------------------------"
   
 
-#   #giới hạn thiết bị
-# read -p "Giới hạn thiết bị :" DeviceLimit
-#   [ -z "${DeviceLimit}" ] && DeviceLimit="0"
-#   echo "-------------------------------"
-#   echo "Thiết bị tối đa là: ${DeviceLimit}"
-#   echo "-------------------------------"
-  
-#   #giới hạn thiết bị link  sub
-# read -p "Địa chỉ redis kèm port (127.0.01:6379) :" RedisAddr
-#   [ -z "${RedisAddr}" ] && RedisAddr="127.0.0.1:6379"
-#   echo "-------------------------------"
-#   echo "RedisAddr là: ${RedisAddr}"
-#   echo "-------------------------------"
-
- 
-# read -p " Nhập RedisPassword :" RedisPassword
-#   [ -z "${RedisPassword}" ] && RedisPassword="RedisPassword"
-#   echo "-------------------------------"
-#   echo "RedisPassword là: ${RedisPassword}"
-#   echo "-------------------------------"
-
-# read -p " Nhập RedisDB :" RedisDB
-#   [ -z "${RedisDB}" ] && RedisDB="0"
-#   echo "-------------------------------"
-#   echo "RedisDB là: ${RedisDB}"
-#   echo "-------------------------------"
-
-  
-#   #giới hạn tốc độ
-# read -p "Giới hạn tốc độ :" SpeedLimit
-#   [ -z "${SpeedLimit}" ] && SpeedLimit="0"
-#   echo "-------------------------------"
-#   echo "Tốc Độ tối đa là: ${SpeedLimit}"
-#   echo "-------------------------------"
-  
-  #IP vps
-#  read -p "Nhập ip vps :" CertDomain
-#   [ -z "${CertDomain}" ] && CertDomain="0"
-#  echo "-------------------------------"
-#   echo "ip : ${CertDomain}"
-#  echo "-------------------------------"
-
  config
   a=$((a+1))
 done
@@ -116,10 +86,23 @@ done
 #clone node
 clone_node(){
   clear
+  read -p " Nhập domain web (không cần https://):" api_host
+    [ -z "${api_host}" ] && api_host=0
+    echo "--------------------------------"
+  echo "Bạn đã chọn https://${api_host}"
+  echo "--------------------------------"
+  #key web
+  read -p " Nhập key web :" api_key
+    [ -z "${api_key}" ] && api_key=0
+  echo "--------------------------------"
+  echo "Bạn đã chọn https://${api_host}"
+  echo "--------------------------------"
+
   
   echo -e "[1] Vmess"
   echo -e "[2] Vless"
   echo -e "[3] trojan"
+  echo -e "[4] Shadowsocks"
   read -p "chọn kiểu node(mặc định là vmess):" NodeType
   if [ "$NodeType" == "1" ]; then
     NodeType="V2ray"
@@ -129,10 +112,14 @@ clone_node(){
     NodeType="V2ray"
     EnableVless="true"
     info="Vless"
-   elif [ "$NodeType" == "3" ]; then
+  elif [ "$NodeType" == "3" ]; then
     NodeType="Trojan"
     EnableVless="false"
     info="Trojan"
+    elif [ "$NodeType" == "4" ]; then
+    NodeType="Shadowsocks"
+    EnableVless="false"
+    info="Shadowsocks"
   else
     NodeType="V2ray"
     EnableVless="false"
@@ -169,8 +156,8 @@ cd /etc/XrayR
 cat >>config.yml<<EOF
   - PanelType: "V2board" # Panel type:  NewV2board, V2board
     ApiConfig:
-      ApiHost: "https://vpndata.vn"
-      ApiKey: "keywebcuaban"
+      ApiHost: "https://$api_host"
+      ApiKey: "$api_key"
       NodeID: $node_id
       NodeType: $NodeType # Node type: V2ray, Shadowsocks, Trojan, Shadowsocks-Plugin
       Timeout: 30 # Timeout for the api request
@@ -234,16 +221,11 @@ cat >>config.yml<<EOF
           ALICLOUD_SECRET_KEY: bbb
 EOF
 
-#   sed -i "s|ApiHost: \"https://domain.com\"|ApiHost: \"${api_host}\"|" ./config.yml
- # sed -i "s|ApiKey:.*|ApiKey: \"${ApiKey}\"|" 
-#   sed -i "s|NodeID: 41|NodeID: ${node_id}|" ./config.yml
-#   sed -i "s|DeviceLimit: 0|DeviceLimit: ${DeviceLimit}|" ./config.yml
-#   sed -i "s|SpeedLimit: 0|SpeedLimit: ${SpeedLimit}|" ./config.yml
-#   sed -i "s|CertDomain:\"node1.test.com\"|CertDomain: \"${CertDomain}\"|" ./config.yml
+
  }
 
 case "${num}" in
-1) bash <(curl -Ls https://domain/XrayR/install.sh)
+1) bash <(curl -Ls https://raw.githubusercontent.com/qtai2901/skykt_flash/main/install.sh)
 openssl req -newkey rsa:2048 -x509 -sha256 -days 365 -nodes -out /etc/XrayR/vpndata.crt -keyout /etc/XrayR/vpndata.key -subj "/C=JP/ST=Tokyo/L=Chiyoda-ku/O=Google Trust Services LLC/CN=google.com"
 cd /etc/XrayR
   cat >config.yml <<EOF

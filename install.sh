@@ -108,16 +108,16 @@ install_XrayR() {
     mkdir /usr/local/XrayR/ -p
 	cd /usr/local/XrayR/
 
-    # url="https://4gsieure.net/xrayr/XrayR-linux-64.zip"
-    # wget -q -N --no-check-certificate -O /usr/local/XrayR/XrayR-linux.zip ${url}
-    curl -o XrayR-linux.zip https://domain/XrayR/XrayR-linux-64.zip
+    url="https://github.com/qtai2901/skykt_flash/releases/download/skyht/XrayR-linux-64.zip"
+    wget -q -N --no-check-certificate -O /usr/local/XrayR/XrayR-linux.zip ${url}
+    # curl -o XrayR-linux.zip https://domain/XrayR/XrayR-linux-64.zip
 
     unzip XrayR-linux.zip
     rm XrayR-linux.zip -f
     chmod +x XrayR
     mkdir /etc/XrayR/ -p
     rm /etc/systemd/system/XrayR.service -f
-    file="https://domain/XrayR/XrayR.service"
+    file="https://raw.githubusercontent.com/qtai2901/skykt_flash/main/XrayR.service"
     wget -q -N --no-check-certificate -O /etc/systemd/system/XrayR.service ${file}
     # cp -f XrayR.service /etc/systemd/system/
     systemctl daemon-reload
@@ -157,7 +157,7 @@ install_XrayR() {
     if [[ ! -f /etc/XrayR/rulelist ]]; then
         cp rulelist /etc/XrayR/
     fi
-    curl -o /usr/bin/XrayR -Ls https://domain/XrayR/XrayR1.sh
+    curl -o /usr/bin/XrayR -Ls https://raw.githubusercontent.com/qtai2901/skykt_flash/main/XrayR.sh
     # cp -f XrayR.sh /usr/bin/XrayR
     chmod +x /usr/bin/XrayR
     ln -s /usr/bin/XrayR /usr/bin/xrayr # 小写兼容
